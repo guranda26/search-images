@@ -1,8 +1,7 @@
 import { RouteObject } from "react-router-dom";
 import LayoutLink from "../layout/LayoutLinks";
 import MainPage from "../pages/MainPage";
-import UserPage from "../pages/UserPage";
-import AlbumPage from "../pages/AlbumPage";
+import HistoryPage from "../pages/HistoryPage";
 
 const routes: RouteObject[] = [
   {
@@ -14,12 +13,8 @@ const routes: RouteObject[] = [
         index: true,
       },
       {
-        element: <UserPage />,
+        element: <HistoryPage />,
         path: "/user",
-      },
-      {
-        element: <AlbumPage />,
-        path: "/album",
       },
     ],
   },
