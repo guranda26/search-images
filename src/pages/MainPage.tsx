@@ -19,6 +19,7 @@ const MainPage: React.FC<{}> = () => {
     views: 0,
     likes: 0,
   });
+  const [isFetchingPopular, setIsFetchingPopular] = useState(false);
 
   const cached = useRef<{
     [key: string]: { images: ImageInterface[]; countImage: number };
@@ -40,6 +41,7 @@ const MainPage: React.FC<{}> = () => {
 
     const query = searchImg.current?.value.trim();
     const isPopular = !query || query === "popular";
+    setIsFetchingPopular(isPopular);
     const keyOfCache = `${isPopular ? "popular" : query}-${page}`;
 
     if (cached.current[keyOfCache]) {
@@ -162,7 +164,9 @@ const MainPage: React.FC<{}> = () => {
           />
         ))}
       </section>
-      <div className="loading"></div>
+      <div
+        className={`loading ${isFetchingPopular ? "hide-loader" : ""}`}
+      ></div>
     </section>
   );
 };

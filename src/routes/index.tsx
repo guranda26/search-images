@@ -2,6 +2,7 @@ import { RouteObject } from "react-router-dom";
 import LayoutLink from "../layout/LayoutLinks";
 import MainPage from "../pages/MainPage";
 import HistoryPage from "../pages/HistoryPage";
+import ErrorPage from "../pages/ErrorPage";
 
 const routes: RouteObject[] = [
   {
@@ -17,6 +18,10 @@ const routes: RouteObject[] = [
         path: "/history",
       },
     ],
+  },
+  {
+    element: <ErrorPage />,
+    path: "*",
   },
 ];
 
