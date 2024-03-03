@@ -14,7 +14,7 @@ const routes: RouteObject[] = [
       },
       {
         element: <HistoryPage />,
-        path: "/user",
+        path: "/history",
       },
     ],
   },

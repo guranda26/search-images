@@ -4,7 +4,7 @@ const LayoutLink: React.FC<{}> = () => {
   return (
     <div>
       <nav>
-        <Link to={"/"}>მთავარი</Link> | <Link to={"/user"}>ისტორია</Link>
+        <Link to={"/"}>მთავარი</Link> | <Link to={"/history"}>ისტორია</Link>
       </nav>
       <Outlet />
     </div>

@@ -4,6 +4,7 @@ import ImageInterface from "../interface/image.interface";
 import SearchHistory from "../components/UpdateSearch";
 import ApiResponse from "../interface/api.response";
 import ScrollBottom from "../components/ScrollBottom";
+import ImageModal from "../components/Modal";
 
 const MainPage: React.FC<{}> = () => {
   const [images, setImages] = useState<ImageInterface[]>([]);
@@ -12,6 +13,12 @@ const MainPage: React.FC<{}> = () => {
   const [errorMsg, setError] = useState("");
   const searchImg = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
+  const [select, setSelect] = useState<ImageInterface | null>(null);
+  const [selectedImageStats, setSelectedImageStats] = useState({
+    downloads: 0,
+    views: 0,
+    likes: 0,
+  });
 
   const cached = useRef<{
     [key: string]: { images: ImageInterface[]; countImage: number };
@@ -24,7 +31,7 @@ const MainPage: React.FC<{}> = () => {
 
   const handleScroll = useCallback(() => {
     if (ScrollBottom() && !loading && page < countImage) {
-      setPage((prevPage) => prevPage + 1); // Increment page to fetch new set
+      setPage((prevPage) => prevPage + 1);
     }
   }, [loading, page, countImage]);
 
@@ -94,11 +101,44 @@ const MainPage: React.FC<{}> = () => {
     setImages([]);
     fetchImages();
   };
+
+  const fetchImageStats = async (imageId: number) => {
+    const response = await axios.get(`${PHOTOS_API}/${imageId}/statistics`, {
+      headers: { Authorization: `Client-ID ${process.env.REACT_APP_API_KEY}` },
+    });
+    const stats = response.data;
+    return {
+      downloads: stats.downloads.total,
+      views: stats.views.total,
+      likes: stats.likes.total,
+    };
+  };
+
+  const handleClick = async (image: ImageInterface) => {
+    setSelect(image);
+    try {
+      const stats = await fetchImageStats(image.id);
+      setSelectedImageStats({
+        ...stats,
+        likes: image.likes ?? 0,
+      });
+    } catch (error) {
+      console.error("Failed to fetch image stats", error);
+    }
+  };
+
   return (
     <section>
       <article className="search-box">
         <h1 className="search-heading">Search Image</h1>
         {errorMsg && <p className="error-message">{errorMsg}</p>}
+        <div>
+          <ImageModal
+            image={select}
+            stats={selectedImageStats}
+            onClose={() => setSelect(null)}
+          />
+        </div>
         <div>
           <form className="search-form" onSubmit={handleSearch}>
             <input
@@ -117,6 +157,7 @@ const MainPage: React.FC<{}> = () => {
             alt={image.alt_description}
             key={`${image.id}-${index}`}
             className="image-item"
+            onClick={() => handleClick(image)}
           />
         ))}
       </section>
