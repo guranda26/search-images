@@ -150,6 +150,7 @@ const MainPage: React.FC<{}> = () => {
           </form>
         </div>
       </article>
+
       <section className="image-items">
         {images.map((image, index) => (
           <img
@@ -161,7 +162,7 @@ const MainPage: React.FC<{}> = () => {
           />
         ))}
       </section>
-      <div className="button"></div>
+      <div className="loading"></div>
     </section>
   );
 };
